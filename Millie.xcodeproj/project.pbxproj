@@ -15,6 +15,12 @@
 		13DD9E752CB4F3D000114BBA /* MillieTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13DD9E742CB4F3D000114BBA /* MillieTests.swift */; };
 		13DD9E7F2CB4F3D000114BBA /* MillieUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13DD9E7E2CB4F3D000114BBA /* MillieUITests.swift */; };
 		13DD9E812CB4F3D000114BBA /* MillieUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13DD9E802CB4F3D000114BBA /* MillieUITestsLaunchTests.swift */; };
+		13DD9E912CB69BE900114BBA /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13DD9E902CB69BE900114BBA /* HTTPClient.swift */; };
+		13DD9E942CB69CBB00114BBA /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 13DD9E932CB69CBB00114BBA /* Alamofire */; };
+		13DD9E982CB6BC9C00114BBA /* APIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13DD9E972CB6BC9C00114BBA /* APIConstants.swift */; };
+		13DD9E9A2CB6BCE200114BBA /* APIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13DD9E992CB6BCE200114BBA /* APIEndpoint.swift */; };
+		13DD9E9C2CB6C01900114BBA /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13DD9E9B2CB6C01900114BBA /* NetworkError.swift */; };
+		13DD9E9E2CB6C0B000114BBA /* NewsEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13DD9E9D2CB6C0B000114BBA /* NewsEntry.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +53,11 @@
 		13DD9E7A2CB4F3D000114BBA /* MillieUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MillieUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		13DD9E7E2CB4F3D000114BBA /* MillieUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MillieUITests.swift; sourceTree = "<group>"; };
 		13DD9E802CB4F3D000114BBA /* MillieUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MillieUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		13DD9E902CB69BE900114BBA /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
+		13DD9E972CB6BC9C00114BBA /* APIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConstants.swift; sourceTree = "<group>"; };
+		13DD9E992CB6BCE200114BBA /* APIEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIEndpoint.swift; sourceTree = "<group>"; };
+		13DD9E9B2CB6C01900114BBA /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
+		13DD9E9D2CB6C0B000114BBA /* NewsEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsEntry.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +65,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				13DD9E942CB69CBB00114BBA /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,6 +93,7 @@
 				13DD9E732CB4F3D000114BBA /* MillieTests */,
 				13DD9E7D2CB4F3D000114BBA /* MillieUITests */,
 				13DD9E5B2CB4F3CE00114BBA /* Products */,
+				13DD9E922CB69CBB00114BBA /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -100,6 +113,8 @@
 				13DD9E5D2CB4F3CE00114BBA /* AppDelegate.swift */,
 				13DD9E5F2CB4F3CE00114BBA /* SceneDelegate.swift */,
 				13DD9E612CB4F3CE00114BBA /* ViewController.swift */,
+				13DD9E962CB6BC4100114BBA /* Network */,
+				13DD9E952CB6BC2F00114BBA /* Models */,
 				13DD9E662CB4F3D000114BBA /* Assets.xcassets */,
 				13DD9E682CB4F3D000114BBA /* LaunchScreen.storyboard */,
 				13DD9E6B2CB4F3D000114BBA /* Info.plist */,
@@ -124,6 +139,32 @@
 			path = MillieUITests;
 			sourceTree = "<group>";
 		};
+		13DD9E922CB69CBB00114BBA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		13DD9E952CB6BC2F00114BBA /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				13DD9E9D2CB6C0B000114BBA /* NewsEntry.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		13DD9E962CB6BC4100114BBA /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				13DD9E972CB6BC9C00114BBA /* APIConstants.swift */,
+				13DD9E992CB6BCE200114BBA /* APIEndpoint.swift */,
+				13DD9E902CB69BE900114BBA /* HTTPClient.swift */,
+				13DD9E9B2CB6C01900114BBA /* NetworkError.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -140,6 +181,9 @@
 			dependencies = (
 			);
 			name = Millie;
+			packageProductDependencies = (
+				13DD9E932CB69CBB00114BBA /* Alamofire */,
+			);
 			productName = Millie;
 			productReference = 13DD9E5A2CB4F3CE00114BBA /* Millie.app */;
 			productType = "com.apple.product-type.application";
@@ -258,7 +302,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				13DD9E622CB4F3CE00114BBA /* ViewController.swift in Sources */,
+				13DD9E9E2CB6C0B000114BBA /* NewsEntry.swift in Sources */,
+				13DD9E9C2CB6C01900114BBA /* NetworkError.swift in Sources */,
+				13DD9E9A2CB6BCE200114BBA /* APIEndpoint.swift in Sources */,
+				13DD9E982CB6BC9C00114BBA /* APIConstants.swift in Sources */,
 				13DD9E5E2CB4F3CE00114BBA /* AppDelegate.swift in Sources */,
+				13DD9E912CB69BE900114BBA /* HTTPClient.swift in Sources */,
 				13DD9E602CB4F3CE00114BBA /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -441,6 +490,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -469,6 +519,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -609,6 +660,14 @@
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		13DD9E932CB69CBB00114BBA /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 13DD9E8F2CB697F300114BBA /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 13DD9E522CB4F3CE00114BBA /* Project object */;
 }

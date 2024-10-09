@@ -11,9 +11,14 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        HTTPClient
+            .shared
+            .requestWithCustomError(
+                endpoint: APIEndpoint.topHeadlines(country: "us")
+            ) { (result: Result<NewsEntry, NetworkError>) in
+                print(result.self)
+            }
     }
-
 
 }
 
