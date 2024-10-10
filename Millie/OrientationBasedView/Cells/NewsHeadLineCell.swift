@@ -7,7 +7,7 @@
 
 import UIKit
 
-class NewsHeadLineCell: UICollectionViewCell {
+class NewsHeadLineCell: UICollectionViewCell, ReusableCell {
     static let identifier = "NewsHeadLineCell"
     
     private let label: UILabel = {
