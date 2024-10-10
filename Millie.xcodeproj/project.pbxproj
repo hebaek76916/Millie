@@ -10,6 +10,7 @@
 		139057D72CB7A9E500A237F8 /* OrientBasedCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139057D62CB7A9E500A237F8 /* OrientBasedCollectionView.swift */; };
 		139057DA2CB7F79A00A237F8 /* OrientBasedCollectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139057D92CB7F79A00A237F8 /* OrientBasedCollectionViewModel.swift */; };
 		139057DC2CB7F7E500A237F8 /* ReusableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139057DB2CB7F7E500A237F8 /* ReusableCell.swift */; };
+		139057DE2CB8160200A237F8 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139057DD2CB8160200A237F8 /* ImageLoader.swift */; };
 		13DD9E5E2CB4F3CE00114BBA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13DD9E5D2CB4F3CE00114BBA /* AppDelegate.swift */; };
 		13DD9E602CB4F3CE00114BBA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13DD9E5F2CB4F3CE00114BBA /* SceneDelegate.swift */; };
 		13DD9E622CB4F3CE00114BBA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13DD9E612CB4F3CE00114BBA /* ViewController.swift */; };
@@ -49,6 +50,7 @@
 		139057D62CB7A9E500A237F8 /* OrientBasedCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrientBasedCollectionView.swift; sourceTree = "<group>"; };
 		139057D92CB7F79A00A237F8 /* OrientBasedCollectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrientBasedCollectionViewModel.swift; sourceTree = "<group>"; };
 		139057DB2CB7F7E500A237F8 /* ReusableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReusableCell.swift; sourceTree = "<group>"; };
+		139057DD2CB8160200A237F8 /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
 		13DD9E5A2CB4F3CE00114BBA /* Millie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Millie.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13DD9E5D2CB4F3CE00114BBA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		13DD9E5F2CB4F3CE00114BBA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -106,6 +108,14 @@
 			path = OrientationBasedView;
 			sourceTree = "<group>";
 		};
+		139057DF2CB816B300A237F8 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				139057DD2CB8160200A237F8 /* ImageLoader.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
 		13DD9E512CB4F3CE00114BBA = {
 			isa = PBXGroup;
 			children = (
@@ -136,6 +146,7 @@
 				13DD9EA22CB6EDBD00114BBA /* Extensions */,
 				139057D52CB7A98000A237F8 /* OrientationBasedView */,
 				13DD9E962CB6BC4100114BBA /* Network */,
+				139057DF2CB816B300A237F8 /* Managers */,
 				13DD9E952CB6BC2F00114BBA /* Models */,
 				13DD9E662CB4F3D000114BBA /* Assets.xcassets */,
 				13DD9E682CB4F3D000114BBA /* LaunchScreen.storyboard */,
@@ -340,6 +351,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				139057DE2CB8160200A237F8 /* ImageLoader.swift in Sources */,
 				13DD9E622CB4F3CE00114BBA /* ViewController.swift in Sources */,
 				13DD9E9E2CB6C0B000114BBA /* NewsEntry.swift in Sources */,
 				13DD9E9C2CB6C01900114BBA /* NetworkError.swift in Sources */,

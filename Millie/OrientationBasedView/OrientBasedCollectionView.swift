@@ -7,7 +7,15 @@
 
 import UIKit
 
-class OrientBasedCollectionView<CellType: ReusableCell>: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class OrientBasedCollectionView<CellType: ReusableCell, ModelType: Decodable>: UIView,
+                                                                               UICollectionViewDataSource,
+                                                                               UICollectionViewDelegateFlowLayout where CellType.DataType == ModelType {
+    // 데이터 소스
+    var items: [ModelType] = [] {
+        didSet {
+            collectionView.reloadData()
+        }
+    }
     
     private let scrollView: UIScrollView = {
         let sv = UIScrollView()
@@ -61,7 +69,7 @@ class OrientBasedCollectionView<CellType: ReusableCell>: UIView, UICollectionVie
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return items.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -70,7 +78,8 @@ class OrientBasedCollectionView<CellType: ReusableCell>: UIView, UICollectionVie
             for: indexPath) as? CellType else {
             return UICollectionViewCell()
         }
-        cell.configure(with: "\(indexPath.item)")
+        let a = items[indexPath.item]
+        cell.configure(with: a)
         return cell
     }
 }

@@ -12,12 +12,13 @@ class ViewController: UIViewController {
     
     private var cancellables = Set<AnyCancellable>()
     private let viewModel = OrientBasedCollectionViewModel()
-    private let orientationAwareView = OrientBasedCollectionView<NewsHeadLineCell>()
+    private let orientationAwareView = OrientBasedCollectionView<NewsHeadLineCell, Article>()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpUI()
         bindViewModel()
+        
     }
     
     private func bindViewModel() {
@@ -25,6 +26,13 @@ class ViewController: UIViewController {
             .receive(on: RunLoop.main)
             .sink { [weak self] orientation in
                 self?.orientationAwareView.configureLayout(for: self?.currentInterfaceOrientation ?? .portrait)
+            }
+            .store(in: &cancellables)
+        
+        viewModel.$newsItems
+            .receive(on: RunLoop.main)
+            .sink { [weak self] items in
+                self?.orientationAwareView.items = items
             }
             .store(in: &cancellables)
     }
