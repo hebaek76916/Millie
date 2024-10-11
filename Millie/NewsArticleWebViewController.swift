@@ -8,7 +8,7 @@
 import UIKit
 import WebKit
 
-class WebViewController: UIViewController {
+class NewsArticleWebViewController: UIViewController {
     
     private let article: Article
     private var webView: WKWebView!
@@ -50,7 +50,7 @@ class WebViewController: UIViewController {
 }
 
 //MARK: Set up UI
-extension WebViewController {
+extension NewsArticleWebViewController {
     
     private func setupWebView() {
         view.backgroundColor = .white

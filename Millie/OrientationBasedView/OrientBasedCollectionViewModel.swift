@@ -27,7 +27,7 @@ class OrientBasedCollectionViewModel {
     public func bind(_ collectionView: OrientBasedCollectionView<NewsHeadLineCell, Article>) {
         collectionView.didSelectItem
             .sink { [weak self] selectedItem in
-                self?.handleCollectionViewSelection(of: selectedItem)
+                self?.selectItem(selectedItem)
             }
             .store(in: &cancellables)
     }
@@ -45,8 +45,13 @@ class OrientBasedCollectionViewModel {
         }
     }
     
-    private func handleCollectionViewSelection(of item: Article) {
-        navigateToDetail.send(item)
+    func selectItem(_ item: Article) {
+        guard
+            let index = newsItems.firstIndex(where: { $0.id == item.id }),
+            let _ = newsItems[safe: index]
+        else { return }
+        newsItems[index].setIsSelected(isSelected: true)
+        navigateToDetail.send(newsItems[index])
     }
 }
 

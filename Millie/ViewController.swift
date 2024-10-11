@@ -46,7 +46,7 @@ class ViewController: UIViewController {
     }
     
     private func pushToDetailWebsite(with item: Article) {
-        let vc = WebViewController(article: item)
+        let vc = NewsArticleWebViewController(article: item)
         navigationController?.pushViewController(vc, animated: true)
     }
     

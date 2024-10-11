@@ -52,7 +52,7 @@ class NewsHeadLineCell: UICollectionViewCell, ReusableCell {
         titleLabel.text = nil
         titleImageView.image = nil
         publishedDateLabel.text = nil
-        
+        setSelectedUI(isSelected: false)
     }
     
     func configure(with data: Article) {
@@ -68,15 +68,21 @@ class NewsHeadLineCell: UICollectionViewCell, ReusableCell {
                 }
             }
         }
-
+        
+        setSelectedUI(isSelected: data.isSelected)
     }
-    
 }
 
 //MARK: Set Up UI
 extension NewsHeadLineCell {
+
+    private func setSelectedUI(isSelected: Bool) {
+        self.titleLabel.textColor = isSelected ? .red : .black
+        self.contentView.layer.borderColor = isSelected ? UIColor.red.cgColor : UIColor.clear.cgColor
+    }
     
     private func setUpUI() {
+        contentView.layer.borderWidth = 1.6
         contentView.backgroundColor = UIColor.systemGreen.withAlphaComponent(0.3)
         contentView.layer.cornerRadius = 8
 
