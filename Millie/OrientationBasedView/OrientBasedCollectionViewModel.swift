@@ -15,6 +15,7 @@ class OrientBasedCollectionViewModel {
     @Published var newsItems: [Article] = []
     @Published var isLoading: Bool = false
     @Published var errorMessage: String? = nil
+    let navigateToDetail = PassthroughSubject<Article, Never>()
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -22,6 +23,35 @@ class OrientBasedCollectionViewModel {
         setupOrientationObserver()
         fetchNews()
     }
+    
+    public func bind(_ collectionView: OrientBasedCollectionView<NewsHeadLineCell, Article>) {
+        collectionView.didSelectItem
+            .sink { [weak self] selectedItem in
+                self?.handleCollectionViewSelection(of: selectedItem)
+            }
+            .store(in: &cancellables)
+    }
+    
+    func fetchNews() {
+        HTTPClient.shared.request(endpoint: .topHeadlines(country: "us")) { (result: Result<NewsEntry, NetworkError>) in
+            switch result {
+            case .success(let success):
+                if let items = success.articles {
+                    self.newsItems = items
+                }
+            case .failure(let failure):
+                print(failure)
+            }
+        }
+    }
+    
+    private func handleCollectionViewSelection(of item: Article) {
+        navigateToDetail.send(item)
+    }
+}
+
+//MARK: Set Orientation
+extension OrientBasedCollectionViewModel {
     
     private func setupOrientationObserver() {
         NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)
@@ -48,18 +78,4 @@ class OrientBasedCollectionViewModel {
         }
         return .unknown
     }
-    
-    func fetchNews() {
-        HTTPClient.shared.request(endpoint: .topHeadlines(country: "us")) { (result: Result<NewsEntry, NetworkError>) in
-            switch result {
-            case .success(let success):
-                if let items = success.articles {
-                    self.newsItems = items
-                }
-            case .failure(let failure):
-                print(failure)
-            }
-        }
-    }
 }
-

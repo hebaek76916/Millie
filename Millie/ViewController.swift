@@ -18,10 +18,11 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         setUpUI()
         bindViewModel()
-        
     }
     
     private func bindViewModel() {
+        viewModel.bind(orientationAwareView)
+        
         viewModel.$currentOrientation
             .receive(on: RunLoop.main)
             .sink { [weak self] orientation in
@@ -35,6 +36,18 @@ class ViewController: UIViewController {
                 self?.orientationAwareView.items = items
             }
             .store(in: &cancellables)
+        
+        viewModel.navigateToDetail
+            .receive(on: RunLoop.main)
+            .sink { [weak self] selectedItem in
+                self?.pushToDetailWebsite(with: selectedItem)
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func pushToDetailWebsite(with item: Article) {
+        let vc = WebViewController(article: item)
+        navigationController?.pushViewController(vc, animated: true)
     }
     
 }
@@ -42,6 +55,7 @@ class ViewController: UIViewController {
 //MARK: Set up UI
 private extension ViewController {
     func setUpUI() {
+        view.backgroundColor = .white
         orientationAwareView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(orientationAwareView)
         

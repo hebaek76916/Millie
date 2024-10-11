@@ -6,11 +6,13 @@
 //
 
 import UIKit
+import Combine
 
 class OrientBasedCollectionView<CellType: ReusableCell, ModelType: Decodable>: UIView,
                                                                                UICollectionViewDataSource,
                                                                                UICollectionViewDelegateFlowLayout where CellType.DataType == ModelType {
-    // 데이터 소스
+    let didSelectItem = PassthroughSubject<ModelType, Never>()
+    
     var items: [ModelType] = [] {
         didSet {
             collectionView.reloadData()
@@ -36,7 +38,7 @@ class OrientBasedCollectionView<CellType: ReusableCell, ModelType: Decodable>: U
     private lazy var collectionView: UICollectionView = {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: currentLayout)
         cv.translatesAutoresizingMaskIntoConstraints = false
-        cv.backgroundColor = .white
+        cv.backgroundColor = .clear
         cv.register(CellType.self, forCellWithReuseIdentifier: CellType.identifier)
         cv.dataSource = self
         cv.delegate = self
@@ -73,14 +75,19 @@ class OrientBasedCollectionView<CellType: ReusableCell, ModelType: Decodable>: U
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: CellType.identifier,
-            for: indexPath) as? CellType else {
+        guard
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellType.identifier, for: indexPath) as? CellType,
+            let item = items[safe: indexPath.item]
+        else {
             return UICollectionViewCell()
         }
-        let a = items[indexPath.item]
-        cell.configure(with: a)
+        cell.configure(with: item)
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let selectedItem = items[safe: indexPath.item] else { return }
+        didSelectItem.send(selectedItem)
     }
 }
 
@@ -94,7 +101,6 @@ private extension OrientBasedCollectionView {
     
     func setupScrollView() {
         addSubview(scrollView)
-        
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
