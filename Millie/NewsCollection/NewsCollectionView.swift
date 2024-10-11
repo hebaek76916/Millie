@@ -8,11 +8,11 @@
 import UIKit
 import Combine
 
-class ViewController: UIViewController {
+class NewsCollectionView: UIViewController {
     
     private var cancellables = Set<AnyCancellable>()
-    private let viewModel = OrientBasedCollectionViewModel()
-    private let orientationAwareView = OrientBasedCollectionView<NewsHeadLineCell, Article>()
+    private let viewModel = NewsArticleCollectionViewModel()
+    private let newsCollectionView = OrientBasedCollectionView<NewsHeadLineCell, Article>()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,19 +21,19 @@ class ViewController: UIViewController {
     }
     
     private func bindViewModel() {
-        viewModel.bind(orientationAwareView)
+        viewModel.bind(newsCollectionView)
         
         viewModel.$currentOrientation
             .receive(on: RunLoop.main)
             .sink { [weak self] orientation in
-                self?.orientationAwareView.configureLayout(for: self?.currentInterfaceOrientation ?? .portrait)
+                self?.newsCollectionView.configureLayout(for: orientation)
             }
             .store(in: &cancellables)
         
         viewModel.$newsItems
             .receive(on: RunLoop.main)
             .sink { [weak self] items in
-                self?.orientationAwareView.items = items
+                self?.newsCollectionView.items = items
             }
             .store(in: &cancellables)
         
@@ -53,17 +53,17 @@ class ViewController: UIViewController {
 }
 
 //MARK: Set up UI
-private extension ViewController {
+private extension NewsCollectionView {
     func setUpUI() {
         view.backgroundColor = .white
-        orientationAwareView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(orientationAwareView)
+        newsCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(newsCollectionView)
         
         NSLayoutConstraint.activate([
-            orientationAwareView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            orientationAwareView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            orientationAwareView.topAnchor.constraint(equalTo: view.topAnchor),
-            orientationAwareView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            newsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            newsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            newsCollectionView.topAnchor.constraint(equalTo: view.topAnchor),
+            newsCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
 }

@@ -8,7 +8,9 @@
 import UIKit
 
 extension UIViewController {
-    var currentInterfaceOrientation: UIInterfaceOrientation {
+    
+    // Device의 orientation을 가져옴.
+    static var currentInterfaceOrientation: UIInterfaceOrientation {
         if #available(iOS 13.0, *) {
             if let orientation = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.windows.first?.windowScene?.interfaceOrientation,
                orientation == .portrait || orientation == .portraitUpsideDown
