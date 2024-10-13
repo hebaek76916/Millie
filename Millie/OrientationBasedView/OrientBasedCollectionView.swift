@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  OrientBasedCollectionView.swift
 //  Millie
 //
 //  Created by 현은백 on 10/10/24.
@@ -138,7 +138,7 @@ private extension OrientBasedCollectionView {
     
     private func setupPortraitLayout() {
         currentLayout.scrollDirection = .vertical
-        currentLayout.itemSize = CGSize(width: 300, height: 120)
+        currentLayout.itemSize = CGSize(width: frame.width, height: frame.width / 2.0)
         currentLayout.sectionInset = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
         
         collectionViewWidthConstraint.isActive = false
