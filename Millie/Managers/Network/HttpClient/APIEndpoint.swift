@@ -8,7 +8,7 @@
 import Foundation
 
 enum APIEndpoint {
-    case topHeadlines(country: String)
+    case topHeadlines(country: String, page: Int)
     
     var path: String {
         switch self {
@@ -19,9 +19,10 @@ enum APIEndpoint {
     
     var queryParameters: [String: String] {
         switch self {
-        case .topHeadlines(let country):
+        case .topHeadlines(let country, let page):
             return [
-                "country": country
+                "country": country,
+                "page": "\(page)"
             ]
         }
     }

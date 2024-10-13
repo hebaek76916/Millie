@@ -11,6 +11,7 @@ import Combine
 class OrientBasedCollectionView<CellType: ReusableCell, ModelType: Decodable>: UIView,
                                                                                UICollectionViewDataSource,
                                                                                UICollectionViewDelegateFlowLayout where CellType.DataType == ModelType {
+    let loadMorePublisher = PassthroughSubject<Void, Never>()
     let didSelectItem = PassthroughSubject<ModelType, Never>()
     
     var items: [ModelType] = [] {
@@ -68,6 +69,17 @@ class OrientBasedCollectionView<CellType: ReusableCell, ModelType: Decodable>: U
     public func configureCollectionViewLayout(layout: UICollectionViewFlowLayout) {
         collectionView.collectionViewLayout = layout
         collectionView.collectionViewLayout.invalidateLayout()
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        let frameHeight = scrollView.frame.size.height
+        
+        let threshold = contentHeight - frameHeight - 100
+        if offsetY > threshold {
+            loadMorePublisher.send()
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

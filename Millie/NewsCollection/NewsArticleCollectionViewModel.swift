@@ -9,14 +9,17 @@ import UIKit
 import Combine
 import CoreData
 
-//@MainActor
-class NewsArticleCollectionViewModel: OrientBasedCollectionViewModel {
+class NewsArticleCollectionViewModel: OrientBasedCollectionViewModel, NetworkMonitorable {
+    
     @Published var newsItems: [Article] = []
     @Published var isLoading: Bool = false
     @Published var errorMessage: String? = nil
+    
     let navigateToDetail = PassthroughSubject<Article, Never>()
-    private var cancellables = Set<AnyCancellable>()
-    private let networkMonitor = NetworkMonitor.shared
+    internal var cancellables = Set<AnyCancellable>()
+    internal let networkMonitor = NetworkMonitor.shared
+    private var currentPage: Int = 1
+    private var totalResults: Int = 0
 
     override init() {
         super.init()
@@ -37,7 +40,9 @@ class NewsArticleCollectionViewModel: OrientBasedCollectionViewModel {
             let item = newsItems[safe: index]
         else { return }
         newsItems[index].setIsSelected(isSelected: true)
-        markArticleAsRead(articleID: item.id)
+        if !networkMonitor.isConnected {
+            markArticleAsRead(articleID: item.id)
+        }
         navigateToDetail.send(newsItems[index])
     }
     
@@ -64,7 +69,7 @@ class NewsArticleCollectionViewModel: OrientBasedCollectionViewModel {
 //MARK: Network Status
 extension NewsArticleCollectionViewModel {
     
-    private func setupNetworkMonitoring() {
+    internal func setupNetworkMonitoring() {
         networkMonitor.$isConnected
             .receive(on: DispatchQueue.main)
             .sink { [weak self] isConnected in
@@ -74,6 +79,7 @@ extension NewsArticleCollectionViewModel {
                         await self.fetchNewsFromNetwork()
                     }
                 } else {
+                    guard self.newsItems.isEmpty else { return }
                     self.fetchFromCoreData()
                 }
             }
@@ -85,17 +91,29 @@ extension NewsArticleCollectionViewModel {
 //MARK: Fetch Data
 extension NewsArticleCollectionViewModel {
     
+    func fetchNews() {
+        guard networkMonitor.isConnected else { return }
+        guard !isLoading && (totalResults > newsItems.count) else { return }
+        isLoading = true
+        Task {
+            await fetchNewsFromNetwork()
+            isLoading = false
+        }
+    }
+    
     func fetchNewsFromNetwork() async  {
         let result: Result<NewsEntry, NetworkError> = await withCheckedContinuation { continuation in
-            HTTPClient.shared.request(endpoint: .topHeadlines(country: "us")) { result in
+            HTTPClient.shared.request(endpoint: .topHeadlines(country: "us", page: currentPage)) { result in
                 continuation.resume(returning: result)
             }
         }
          
         switch result {
         case .success(let success):
+            totalResults = success.totalResults ?? 0
             if let items = success.articles {
-                self.newsItems = items
+                self.newsItems.append(contentsOf: items)
+                self.currentPage += 1
                 await self.downloadImagesAndSaveToCoreData(articles: items)
             }
         case .failure(let failure):

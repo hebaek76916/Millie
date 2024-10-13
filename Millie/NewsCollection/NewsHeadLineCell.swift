@@ -77,6 +77,7 @@ extension NewsHeadLineCell {
 
     private func setSelectedUI(isSelected: Bool) {
         self.titleLabel.textColor = isSelected ? .red : .black
+        self.publishedDateLabel.textColor = isSelected ? .red : .black
         self.contentView.layer.borderColor = isSelected ? UIColor.red.cgColor : UIColor.clear.cgColor
     }
     

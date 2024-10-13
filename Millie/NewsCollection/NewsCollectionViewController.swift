@@ -43,6 +43,12 @@ class NewsCollectionViewController: UIViewController {
                 self?.pushToDetailWebsite(with: selectedItem)
             }
             .store(in: &cancellables)
+        
+        newsCollectionView.loadMorePublisher
+            .sink { [weak self] in
+                self?.viewModel.fetchNews()
+            }
+            .store(in: &cancellables)
     }
     
     private func pushToDetailWebsite(with item: Article) {

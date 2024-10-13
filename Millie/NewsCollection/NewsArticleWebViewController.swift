@@ -7,11 +7,14 @@
 
 import UIKit
 import WebKit
+import Combine
 
-class NewsArticleWebViewController: UIViewController {
+class NewsArticleWebViewController: UIViewController, NetworkMonitorable {
     
     private let article: Article
     private var webView: WKWebView!
+    internal let networkMonitor = NetworkMonitor.shared
+    internal var cancellables = Set<AnyCancellable>()
     
     init(article: Article) {
         self.article = article
@@ -24,15 +27,37 @@ class NewsArticleWebViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        setupNavigationBar()
-        setupWebView()
+        setUpUI()
+        setupNetworkMonitoring()
         loadArticle()
     }
     
-    private func setupNavigationBar() {
-        self.title = article.title
-        self.navigationController?.navigationBar.prefersLargeTitles = false
+    internal func setupNetworkMonitoring() {
+        networkMonitor.$isConnected
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isConnected in
+                if !isConnected {
+                    if let urlString = self?.article.url,
+                        self?.isCacheAvailable(urlString: urlString) == true {
+                        return
+                    }
+                    self?.alertNoInternet()
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func alertNoInternet() {
+        showAlert(
+            title: "인터넷 연결",
+            message: "인터넷 연결을 확인해주세요",
+            actionTitle: "닫기",
+            actionStyle: .destructive,
+            isDestructive: true,
+            completion: { [weak self] in
+                self?.navigationController?.popViewController(animated: true)
+            }
+        )
     }
     
     private func loadArticle() {
@@ -40,17 +65,34 @@ class NewsArticleWebViewController: UIViewController {
             let request = URLRequest(url: url)
             webView.load(request)
         } else {
-            let alert = UIAlertController(title: "오류", message: "유효하지 않은 URL입니다.", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { [weak self] _ in
-                self?.navigationController?.popViewController(animated: true)
-            }))
-            present(alert, animated: true, completion: nil)
+            showAlert(
+            title: "오류",
+                message: "유효하지 않은 URL입니다.",
+                completion: { [weak self] in
+                    self?.navigationController?.popViewController(animated: true)
+                }
+            )
+        }
+    }
+    
+    private func isCacheAvailable(urlString: String) -> Bool {
+        guard let url = URL(string: urlString) else { return false }
+        let request = URLRequest(url: url)
+        if let cachedResponse = URLCache.shared.cachedResponse(for: request) {
+            return true
+        } else {
+            return false
         }
     }
 }
 
 //MARK: Set up UI
 extension NewsArticleWebViewController {
+    
+    func setUpUI() {
+        setupNavigationBar()
+        setupWebView()
+    }
     
     private func setupWebView() {
         view.backgroundColor = .white
@@ -63,6 +105,11 @@ extension NewsArticleWebViewController {
             webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             webView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
+    }
+    
+    private func setupNavigationBar() {
+        self.title = article.title
+        self.navigationController?.navigationBar.prefersLargeTitles = false
     }
 }
 
