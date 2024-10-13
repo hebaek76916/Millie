@@ -36,6 +36,7 @@ extension UIViewController {
         let actionStyle = isDestructive ? UIAlertAction.Style.destructive : actionStyle
 
         alert.addAction(UIAlertAction(title: actionTitle, style: actionStyle, handler: { [weak self] _ in
+            guard let _ = self else { return }
             completion?()
         }))
 

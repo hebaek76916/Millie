@@ -13,6 +13,7 @@ class NewsArticleWebViewController: UIViewController, NetworkMonitorable {
     
     private let article: Article
     private var webView: WKWebView!
+    private var activityIndicator: UIActivityIndicatorView!
     internal let networkMonitor = NetworkMonitor.shared
     internal var cancellables = Set<AnyCancellable>()
     
@@ -78,11 +79,39 @@ class NewsArticleWebViewController: UIViewController, NetworkMonitorable {
     private func isCacheAvailable(urlString: String) -> Bool {
         guard let url = URL(string: urlString) else { return false }
         let request = URLRequest(url: url)
-        if let cachedResponse = URLCache.shared.cachedResponse(for: request) {
+        if let _ = URLCache.shared.cachedResponse(for: request) {
             return true
         } else {
             return false
         }
+    }
+}
+
+//MARK: WKNavigationDelegate
+extension NewsArticleWebViewController: WKNavigationDelegate {
+
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        activityIndicator.startAnimating()
+    }
+
+
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        activityIndicator.stopAnimating()
+    }
+
+    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        activityIndicator.stopAnimating()
+    }
+
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+        activityIndicator.stopAnimating()
+        showAlert(
+        title: "오류",
+            message: "서버 응답 오류",
+            completion: { [weak self] in
+                self?.navigationController?.popViewController(animated: true)
+            }
+        )
     }
 }
 
@@ -92,19 +121,33 @@ extension NewsArticleWebViewController {
     func setUpUI() {
         setupNavigationBar()
         setupWebView()
-    }
-    
-    private func setupWebView() {
-        view.backgroundColor = .white
-        webView = WKWebView(frame: .zero)
-        webView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(webView)
-        NSLayoutConstraint.activate([
-            webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            webView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
+        setUpIndicator()
+        
+        func setupWebView() {
+            view.backgroundColor = MillieConstant.backgroundColor
+            webView = WKWebView(frame: .zero)
+            webView.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview(webView)
+            NSLayoutConstraint.activate([
+                webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+                webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+                webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                webView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            ])
+        }
+        
+        func setUpIndicator() {
+            activityIndicator = UIActivityIndicatorView(style: .large)
+            activityIndicator.color = .purple
+            activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+            activityIndicator.hidesWhenStopped = true
+            view.addSubview(activityIndicator)
+            
+            NSLayoutConstraint.activate([
+                activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            ])
+        }
     }
     
     private func setupNavigationBar() {

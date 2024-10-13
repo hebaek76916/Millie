@@ -61,7 +61,7 @@ class NewsCollectionViewController: UIViewController {
 //MARK: Set up UI
 private extension NewsCollectionViewController {
     func setUpUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor(hex: 0xFFD400)
         setNavigationTitle()
         
         newsCollectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -80,8 +80,10 @@ private extension NewsCollectionViewController {
         self.title = "Articles"
         let attributes = [
             NSAttributedString.Key.font: UIFont(name: "HelveticaNeue-Bold", size: 24)!,
-            NSAttributedString.Key.foregroundColor: UIColor.black
+            NSAttributedString.Key.foregroundColor: MillieConstant.titleColor
         ]
+        navigationController?.navigationBar.backgroundColor = MillieConstant.backgroundColor
+
         navigationController?.navigationBar.titleTextAttributes = attributes
     }
 }
