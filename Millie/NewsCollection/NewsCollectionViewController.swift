@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class NewsCollectionView: UIViewController {
+class NewsCollectionViewController: UIViewController {
     
     private var cancellables = Set<AnyCancellable>()
     private let viewModel = NewsArticleCollectionViewModel()
@@ -53,7 +53,7 @@ class NewsCollectionView: UIViewController {
 }
 
 //MARK: Set up UI
-private extension NewsCollectionView {
+private extension NewsCollectionViewController {
     func setUpUI() {
         view.backgroundColor = .white
         newsCollectionView.translatesAutoresizingMaskIntoConstraints = false
