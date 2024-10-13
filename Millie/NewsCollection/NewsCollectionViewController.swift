@@ -56,6 +56,8 @@ class NewsCollectionViewController: UIViewController {
 private extension NewsCollectionViewController {
     func setUpUI() {
         view.backgroundColor = .white
+        setNavigationTitle()
+        
         newsCollectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(newsCollectionView)
         
@@ -65,5 +67,15 @@ private extension NewsCollectionViewController {
             newsCollectionView.topAnchor.constraint(equalTo: view.topAnchor),
             newsCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+    }
+    
+    
+    private func setNavigationTitle() {
+        self.title = "Articles"
+        let attributes = [
+            NSAttributedString.Key.font: UIFont(name: "HelveticaNeue-Bold", size: 24)!,
+            NSAttributedString.Key.foregroundColor: UIColor.black
+        ]
+        navigationController?.navigationBar.titleTextAttributes = attributes
     }
 }

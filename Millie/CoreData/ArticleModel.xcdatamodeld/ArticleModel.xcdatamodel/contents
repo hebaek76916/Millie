@@ -3,9 +3,10 @@
     <entity name="ArticleEntity" representedClassName="ArticleEntity" syncable="YES">
         <attribute name="content" optional="YES" attributeType="String"/>
         <attribute name="descriptionText" optional="YES" attributeType="String"/>
-        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
         <attribute name="imageData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="isSelected" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="order" optional="YES" attributeType="String"/>
         <attribute name="publishedAt" optional="YES" attributeType="String"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <attribute name="url" optional="YES" attributeType="String"/>

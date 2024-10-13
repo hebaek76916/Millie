@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - Article
 struct Article: Decodable, Identifiable {
-    let id: UUID = UUID()
+    var id: String = UUID().uuidString
     let source: Source?
     let author: String?
     let title: String?

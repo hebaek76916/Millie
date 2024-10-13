@@ -57,8 +57,7 @@ class NewsHeadLineCell: UICollectionViewCell, ReusableCell {
     
     func configure(with data: Article) {
         self.titleLabel.text = data.title
-        //TODO: publishedAt DateFormat 하기
-        self.publishedDateLabel.text = data.publishedAt
+        self.publishedDateLabel.text = data.publishedAt?.toFormattedDateString()
         if let imageURLString = data.urlToImage {
             Task {
                 if let image = try? await ImageLoader.shared.loadImage(from: imageURLString) {

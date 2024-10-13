@@ -34,11 +34,31 @@ class NewsArticleCollectionViewModel: OrientBasedCollectionViewModel {
     private func selectItem(_ item: Article) {
         guard
             let index = newsItems.firstIndex(where: { $0.id == item.id }),
-            let _ = newsItems[safe: index]
+            let item = newsItems[safe: index]
         else { return }
         newsItems[index].setIsSelected(isSelected: true)
+        markArticleAsRead(articleID: item.id)
         navigateToDetail.send(newsItems[index])
     }
+    
+    func markArticleAsRead(articleID: String) {
+        let context = CoreDataManager.shared.mainContext
+        let fetchRequest: NSFetchRequest<ArticleEntity> = ArticleEntity.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", articleID)
+
+        do {
+            let results = try context.fetch(fetchRequest)
+            if let articleEntity = results.first {
+                articleEntity.isSelected = true
+                try context.save()
+            } else {
+                print("해당 기사를 찾을 수 없습니다.")
+            }
+        } catch {
+            print("기사 업데이트 오류: \(error)")
+        }
+    }
+
 }
 
 //MARK: Network Status
@@ -85,10 +105,11 @@ extension NewsArticleCollectionViewModel {
     }
     
     private func fetchFromCoreData() {
-        let sortDescriptors = [NSSortDescriptor(key: "id", ascending: false)]
+        let sortDescriptors = [NSSortDescriptor(key: "order", ascending: true)]
         let fetchedEntities: [ArticleEntity] = CoreDataManager.shared.fetchAll(ArticleEntity.self, sortDescriptors: sortDescriptors)
         self.newsItems = fetchedEntities.map { entity in
             Article(
+                id: entity.id,
                 source: nil,
                 author: nil,
                 title: entity.title,
@@ -103,6 +124,7 @@ extension NewsArticleCollectionViewModel {
     }
     
     private func downloadImagesAndSaveToCoreData(articles: [Article]) async {
+        clearAllCoreDataArticles()
         await withTaskGroup(of: (Article, Data?).self) { group in
             for article in articles {
                 if let imageURL = article.urlToImage {
@@ -122,9 +144,10 @@ extension NewsArticleCollectionViewModel {
             }
             
             var articleEntities: [ArticleEntity] = []
-            
+            var order = 0
             for await (article, imageData) in group {
                 let articleEntity = ArticleEntity(context: CoreDataManager.shared.mainContext)
+                articleEntity.id = article.id
                 articleEntity.title = article.title
                 articleEntity.descriptionText = article.description
                 articleEntity.url = article.url
@@ -133,6 +156,8 @@ extension NewsArticleCollectionViewModel {
                 articleEntity.content = article.content
                 articleEntity.imageData = imageData
                 articleEntity.isSelected = article.isSelected
+                articleEntity.order = "\(order)"
+                order += 1
                 articleEntities.append(articleEntity)
             }
             
