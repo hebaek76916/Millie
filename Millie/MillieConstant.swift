@@ -10,4 +10,6 @@ import UIKit.UIColor
 struct MillieConstant {
     static let backgroundColor = UIColor(hex: 0xFFD400)
     static let titleColor = UIColor(hex: 0x8B00FF)
+    
+    
 }
